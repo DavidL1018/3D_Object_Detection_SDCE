@@ -13,7 +13,7 @@
 # general package imports
 import numpy as np
 import matplotlib
-matplotlib.use('wxagg') # change backend so that figure maximizing works on Mac as well     
+#matplotlib.use('wxagg') # change backend so that figure maximizing works on Mac as well     
 import matplotlib.pyplot as plt
 
 import torch
@@ -48,7 +48,7 @@ def measure_detection_performance(detections, labels, labels_valid, min_iou=0.5)
             print("student task ID_S4_EX1 ")
 
             ## step 1 : extract the four corners of the current label bounding-box
-            corners_label=tools.compute_box_corners(label.box.center_x,label.box.center_y,label.box.center_z,label.box.length,label.box.heading)
+            corners_label=tools.compute_box_corners(label.box.center_x,label.box.center_y,label.box.width,label.box.length,label.box.heading)
 
             ## step 2 : loop over all detected objects
             for obj in detections:
@@ -60,6 +60,7 @@ def measure_detection_performance(detections, labels, labels_valid, min_iou=0.5)
                 dist_x=np.array(label.box.center_x-x).item()
                 dist_y=np.array(label.box.center_y-y).item()
                 dist_z=np.array(label.box.center_z-z).item()
+                
                 ## step 5 : compute the intersection over union (IOU) between label and detection bounding-box
                 polygon_label=Polygon(corners_label)
                 polygon_detections=Polygon(corners_detections)
@@ -67,9 +68,9 @@ def measure_detection_performance(detections, labels, labels_valid, min_iou=0.5)
                 union=polygon_label.union(polygon_detections).area
                 iou=intersection/union
                 ## step 6 : if IOU exceeds min_iou threshold, store [iou,dist_x, dist_y, dist_z] in matches_lab_det and increase the TP count
-                if iou>min_iou:
-                    matches_lab_det.append([iou,dist_x,dist_y,dist_z])
-                    true_positives+=1
+                if iou > min_iou:
+                    matches_lab_det.append((iou, dist_x,dist_y,dist_z))
+                    true_positives +=1
 
             #######
             ####### ID_S4_EX1 END #######     
@@ -80,9 +81,7 @@ def measure_detection_performance(detections, labels, labels_valid, min_iou=0.5)
             ious.append(best_match[0])
             center_devs.append(best_match[1:])
 
-    print(f"ious: {ious}")
-    print(f"center_devs: {center_devs}")
-    print(f"true_positives: {true_positives}")
+   
 
     ####### ID_S4_EX2 START #######     
     #######
