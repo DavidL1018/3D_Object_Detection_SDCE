@@ -237,7 +237,7 @@ def detect_objects(input_bev_maps, model, configs):
          for obj in detections:
             score, bev_x, bev_y, z, h, bev_w, bev_l, yaw = obj
 
-        ## step 3 : perform the conversion using the limits for x, y, and z set in the configs structure
+            ## step 3 : perform the conversion using the limits for x, y, and z set in the configs structure
             yaw=-yaw
             
             x_range=configs.lim_x[1]-configs.lim_x[0]
@@ -252,13 +252,12 @@ def detect_objects(input_bev_maps, model, configs):
             l = bev_l / configs.bev_height * (x_range)
    
         
-        ## step 4 : append the current object to the 'objects' array
+            ## step 4 : append the current object to the 'objects' array
             if (min_x <= x <= max_x and min_y <= y <= max_y and min_z <= z < max_z):
                 objects.append([1,x,y,z,h,w,l,yaw])
 
     ####### ID_S3_EX2 END #######   
     
-    return objects    
-
+    return objects   
 
 
